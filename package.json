@@ -1,0 +1,97 @@
+{
+  "name": "dc-blast-radius",
+  "displayName": "DC Blast Radius",
+  "description": "Visualize architectural risk in your editor — see which symbols are safe to change and which ones can break everything",
+  "version": "0.1.0",
+  "publisher": "digital-construction",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "blastRadius.refresh",
+        "title": "DC Blast Radius: Refresh Analysis"
+      },
+      {
+        "command": "blastRadius.toggle",
+        "title": "DC Blast Radius: Toggle Visibility"
+      },
+      {
+        "command": "blastRadius.showDependents",
+        "title": "DC Blast Radius: Show Dependents"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "blastRadiusDependents",
+          "name": "DC Blast Radius"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "blastRadiusDependents",
+        "contents": "Click a DC Blast Radius CodeLens above any symbol to see its dependents."
+      }
+    ],
+    "configuration": {
+      "title": "DC Blast Radius",
+      "properties": {
+        "blastRadius.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable blast radius decorations"
+        },
+        "blastRadius.thresholds.localSharedMax": {
+          "type": "number",
+          "default": 5,
+          "description": "Max unique external files for local-shared tier (amber). Above this becomes global-shared (red)."
+        },
+        "blastRadius.thresholds.globalSharedLow": {
+          "type": "number",
+          "default": 15,
+          "description": "Upper bound for low-intensity global-shared (light red)"
+        },
+        "blastRadius.thresholds.globalSharedMed": {
+          "type": "number",
+          "default": 40,
+          "description": "Upper bound for medium-intensity global-shared. Above this becomes high-intensity red."
+        },
+        "blastRadius.symbolKinds": {
+          "type": "array",
+          "default": ["Function", "Class", "Method", "Interface", "Enum", "Variable", "Constant"],
+          "description": "Which symbol kinds to analyze. Options: Function, Class, Method, Interface, Enum, Variable, Constant, Property."
+        },
+        "blastRadius.concurrencyLimit": {
+          "type": "number",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 20,
+          "description": "Max concurrent reference lookups per file. Lower = less load on language server."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.5.0"
+  }
+}
