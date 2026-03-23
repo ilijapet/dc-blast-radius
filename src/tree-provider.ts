@@ -19,15 +19,30 @@ export class DependencyTreeProvider implements vscode.TreeDataProvider<Dependent
     private _onDidChange = new vscode.EventEmitter<DependentNode | undefined>();
     readonly onDidChangeTreeData = this._onDidChange.event;
 
-    private currentSymbol: string | undefined;
     private fileNodes: FileNode[] = [];
 
-    async showDependents(symbolName: string, rawUri: vscode.Uri | { path: string; scheme: string }, rawPosition: vscode.Position | { line: number; character: number }): Promise<void> {
-        this.currentSymbol = symbolName;
+    async showDependents(_symbolName: string, rawUri: any, rawPosition: any): Promise<void> {
+        // Guard: command can be invoked without args (e.g. from command palette or tree focus)
+        if (!rawUri || !rawPosition) {
+            return;
+        }
 
         // Reconstruct proper types — CodeLens serializes args to plain objects
-        const uri = rawUri instanceof vscode.Uri ? rawUri : vscode.Uri.file((rawUri as any).fsPath || rawUri.path);
-        const position = rawPosition instanceof vscode.Position ? rawPosition : new vscode.Position(rawPosition.line, rawPosition.character);
+        let uri: vscode.Uri;
+        if (rawUri instanceof vscode.Uri) {
+            uri = rawUri;
+        } else {
+            // Serialized URI: use fsPath/path to reconstruct via Uri.file (most reliable for file:// URIs)
+            const filePath = rawUri.fsPath || rawUri._fsPath || rawUri.path;
+            uri = vscode.Uri.file(filePath);
+        }
+
+        let position: vscode.Position;
+        if (rawPosition instanceof vscode.Position) {
+            position = rawPosition;
+        } else {
+            position = new vscode.Position(rawPosition.line, rawPosition.character);
+        }
 
         const refs = await vscode.commands.executeCommand<vscode.Location[]>(
             'vscode.executeReferenceProvider',

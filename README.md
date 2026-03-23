@@ -2,6 +2,14 @@
 
 Visualize architectural risk directly in your editor. DC Blast Radius colors functions, classes, and symbols based on how many other files depend on them. The more things depend on a symbol, the more dangerous it is to change — and the redder it glows.
 
+## Installation
+
+```bash
+code --install-extension dc-blast-radius-0.1.0.vsix
+```
+
+Then reload VS Code (`Ctrl+Shift+P` > `Developer: Reload Window`).
+
 ## How It Works
 
 Every symbol in your codebase falls into one of three risk tiers:

@@ -146,8 +146,13 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand('blastRadius.showDependents',
             async (symbolName: string, uri: vscode.Uri, position: vscode.Position) => {
-                await treeProvider.showDependents(symbolName, uri, position);
-                await vscode.commands.executeCommand('blastRadiusDependents.focus');
+                try {
+                    await treeProvider.showDependents(symbolName, uri, position);
+                    await vscode.commands.executeCommand('blastRadiusDependents.focus');
+                } catch (err) {
+                    log.appendLine(`ERROR in showDependents: ${err}`);
+                    vscode.window.showErrorMessage(`DC Blast Radius: failed to show dependents — check Output > DC Blast Radius for details`);
+                }
             }
         )
     );
