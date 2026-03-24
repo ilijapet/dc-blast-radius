@@ -10,6 +10,21 @@ code --install-extension dc-blast-radius-0.1.0.vsix
 
 Then reload VS Code (`Ctrl+Shift+P` > `Developer: Reload Window`).
 
+## Build from Source
+
+```bash
+git clone <repo-url>
+cd blast_radius
+npm install
+npx vsce package
+```
+
+This produces `dc-blast-radius-0.1.0.vsix` in the project root. Install it with:
+
+```bash
+code --install-extension dc-blast-radius-0.1.0.vsix
+```
+
 ## How It Works
 
 Every symbol in your codebase falls into one of three risk tiers:

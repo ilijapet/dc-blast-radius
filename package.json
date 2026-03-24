@@ -5,6 +5,10 @@
   "version": "0.1.0",
   "publisher": "digital-construction",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ilijapet/dc-blast-radius"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
