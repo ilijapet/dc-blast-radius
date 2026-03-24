@@ -64,6 +64,19 @@ export class FileAnalyzer {
 
         // Step 2: Get references for each symbol (concurrency-limited)
         const tasks = symbols.map((symbol) => async (): Promise<SymbolRisk> => {
+            // Dunder methods (__init__, __str__, etc.) are internal Python protocol
+            // methods — skip reference lookup and always treat as local.
+            if (DUNDER_RE.test(symbol.name)) {
+                return {
+                    symbolName: symbol.name,
+                    range: symbol.range,
+                    namePosition: symbol.selectionRange.start,
+                    tier: 'local',
+                    fanOut: 0,
+                    uniqueFiles: 0,
+                };
+            }
+
             const position = symbol.selectionRange.start;
 
             const refs = await vscode.commands.executeCommand<vscode.Location[]>(
@@ -124,6 +137,9 @@ export class FileAnalyzer {
         this.cache.clear();
     }
 }
+
+/** Matches Python dunder names like __init__, __str__, __repr__ */
+const DUNDER_RE = /^__[a-zA-Z0-9_]+__$/;
 
 function flattenSymbols(symbols: vscode.DocumentSymbol[], relevantKinds: vscode.SymbolKind[]): vscode.DocumentSymbol[] {
     const result: vscode.DocumentSymbol[] = [];
