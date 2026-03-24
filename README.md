@@ -5,7 +5,7 @@ Visualize architectural risk directly in your editor. DC Blast Radius colors fun
 ## Installation
 
 ```bash
-code --install-extension dc-blast-radius-0.1.1.vsix
+code --install-extension dc-blast-radius-0.1.2.vsix
 ```
 
 Then reload VS Code (`Ctrl+Shift+P` > `Developer: Reload Window`).
@@ -19,10 +19,10 @@ npm install
 npx vsce package
 ```
 
-This produces `dc-blast-radius-0.1.1.vsix` in the project root. Install it with:
+This produces `dc-blast-radius-0.1.2.vsix` in the project root. Install it with:
 
 ```bash
-code --install-extension dc-blast-radius-0.1.1.vsix
+code --install-extension dc-blast-radius-0.1.2.vsix
 ```
 
 ## How It Works

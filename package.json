@@ -2,7 +2,7 @@
   "name": "dc-blast-radius",
   "displayName": "DC Blast Radius",
   "description": "Visualize architectural risk in your editor — see which symbols are safe to change and which ones can break everything",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "digital-construction",
   "license": "MIT",
   "repository": {

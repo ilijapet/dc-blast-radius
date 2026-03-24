@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { SymbolRisk, RiskThresholds } from './types';
-import { parallelLimit } from './utils';
+import { parallelLimit, isThirdParty } from './utils';
 
 const SYMBOL_KIND_MAP: Record<string, vscode.SymbolKind> = {
     'Function': vscode.SymbolKind.Function,
@@ -92,8 +92,9 @@ export class FileAnalyzer {
             if (refs) {
                 const thisFile = document.uri.toString();
                 for (const ref of refs) {
-                    if (ref.uri.toString() !== thisFile) {
-                        externalFiles.add(ref.uri.toString());
+                    const refUri = ref.uri.toString();
+                    if (refUri !== thisFile && !isThirdParty(refUri)) {
+                        externalFiles.add(refUri);
                         fanOut++;
                     }
                 }

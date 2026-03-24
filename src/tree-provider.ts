@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { isThirdParty } from './utils';
 
 interface FileNode {
     type: 'file';
@@ -56,10 +57,11 @@ export class DependencyTreeProvider implements vscode.TreeDataProvider<Dependent
 
         if (refs) {
             for (const ref of refs) {
-                if (ref.uri.toString() === thisFile) {
+                const refUri = ref.uri.toString();
+                if (refUri === thisFile || isThirdParty(refUri)) {
                     continue;
                 }
-                const key = ref.uri.toString();
+                const key = refUri;
                 if (!byFile.has(key)) {
                     byFile.set(key, []);
                 }
